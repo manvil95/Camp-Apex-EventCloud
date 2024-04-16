@@ -1,5 +1,7 @@
 # EventCloud - Event Management Project ([Camp Apex](https://www.campapex.org/projects))
 
+### Managed Package Id - 04t8a000001JoExAAK
+
 ## Data Model
 ![Data model](./datamodel.jpg)
 
