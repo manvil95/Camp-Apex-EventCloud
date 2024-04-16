@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>Set CAMPX__Status__c to Planning when record is created.</description>
+        <name>Set_Status_to_Planning</name>
+        <label>Set Status to Planning</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.CAMPX__Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Planning</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Flow to put Status to Planning before record is created.</description>
+    <environments>Default</environments>
+    <interviewLabel>CAMPX_ {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CAMPX__Event__c Set Status to Planning</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_Status_to_Planning</targetReference>
+        </connector>
+        <object>CAMPX__Event__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+    <triggerOrder>1</triggerOrder>
+</Flow>
