@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Core_AcceptedStatusWithRelatedEvent</fullName>
+    <active>true</active>
+    <description>CAMPX__Status__c is only updated to Accepted if it has a related CAMPX__Event__c.</description>
+    <errorConditionFormula>AND(
+					TEXT(CAMPX__Status__c)  = &apos;Accepted&apos;,
+     ISBLANK(CAMPX__Event__c)
+	)</errorConditionFormula>
+    <errorMessage>A Sponsor must be associated with an event before being Accepted.</errorMessage>
+</ValidationRule>
