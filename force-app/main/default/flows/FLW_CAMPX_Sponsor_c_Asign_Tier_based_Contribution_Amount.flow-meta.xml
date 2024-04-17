@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>Asign CAMPX__Tier__c to Bronze</description>
+        <name>Asign_Tier_Bronze</name>
+        <label>Asign Tier Bronze</label>
+        <locationX>50</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.CAMPX__Tier__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Bronze</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Asign CAMPX__Tier__c to Silver.</description>
+        <name>Asign_Tier_Silver</name>
+        <label>Asign Tier Silver</label>
+        <locationX>314</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.CAMPX__Tier__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Silver</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Asign CAMPX__Tier__c to Gold.</description>
+        <name>Asign_to_Gold</name>
+        <label>Asign Tier Gold</label>
+        <locationX>578</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.CAMPX__Tier__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Gold</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Asign value in order to contibution amount.</description>
+        <name>Contribution_0_to_1000</name>
+        <label>Asign Tier</label>
+        <locationX>446</locationX>
+        <locationY>287</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>X0_to_1000</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>1000.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Asign_Tier_Bronze</targetReference>
+            </connector>
+            <label>0 to 1000</label>
+        </rules>
+        <rules>
+            <name>X1000_to_5000</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>1000.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>5000.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Asign_Tier_Silver</targetReference>
+            </connector>
+            <label>1000 to 5000</label>
+        </rules>
+        <rules>
+            <name>X5000</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>5000.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Asign_to_Gold</targetReference>
+            </connector>
+            <label>&gt; 5000</label>
+        </rules>
+    </decisions>
+    <description>Asign CAMPX__Tier__c field based on CAMPX__ContributionAmount__c field.</description>
+    <environments>Default</environments>
+    <interviewLabel>CAMPX__ {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CAMPX_Sponsor__c Asign Tier based Contribution Amount</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>320</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Contribution_0_to_1000</targetReference>
+        </connector>
+        <object>CAMPX__Sponsor__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
