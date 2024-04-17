@@ -2,6 +2,8 @@
 
 ### Managed Package Id - 04t8a000001JoExAAK
 
+This is easy-peasy to do... It's for beginners.
+
 ## Data Model
 ![Data model](./datamodel.jpg)
 
