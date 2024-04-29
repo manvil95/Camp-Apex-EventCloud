@@ -1,54 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>60.0</apiVersion>
-    <assignments>
-        <description>Asign CAMPX__Tier__c to Bronze</description>
-        <name>Asign_Tier_Bronze</name>
-        <label>Asign Tier Bronze</label>
-        <locationX>50</locationX>
-        <locationY>395</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.CAMPX__Tier__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Bronze</stringValue>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <description>Asign CAMPX__Tier__c to Silver.</description>
-        <name>Asign_Tier_Silver</name>
-        <label>Asign Tier Silver</label>
-        <locationX>314</locationX>
-        <locationY>395</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.CAMPX__Tier__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Silver</stringValue>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <description>Asign CAMPX__Tier__c to Gold.</description>
-        <name>Asign_to_Gold</name>
-        <label>Asign Tier Gold</label>
-        <locationX>578</locationX>
-        <locationY>395</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.CAMPX__Tier__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Gold</stringValue>
-            </value>
-        </assignmentItems>
-    </assignments>
     <decisions>
         <description>Asign value in order to contibution amount.</description>
         <name>Contribution_0_to_1000</name>
         <label>Asign Tier</label>
-        <locationX>446</locationX>
-        <locationY>287</locationY>
+        <locationX>534</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Update_Record_None</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>X0_to_1000</name>
@@ -68,7 +29,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Asign_Tier_Bronze</targetReference>
+                <targetReference>Update_Record_Bronze</targetReference>
             </connector>
             <label>0 to 1000</label>
         </rules>
@@ -90,7 +51,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Asign_Tier_Silver</targetReference>
+                <targetReference>Update_Record_Silver</targetReference>
             </connector>
             <label>1000 to 5000</label>
         </rules>
@@ -105,9 +66,31 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Asign_to_Gold</targetReference>
+                <targetReference>Update_Record</targetReference>
             </connector>
             <label>&gt; 5000</label>
+        </rules>
+        <rules>
+            <name>Is_blank</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CAMPX__ContributionAmount__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Record_None</targetReference>
+            </connector>
+            <label>Is blank</label>
         </rules>
     </decisions>
     <description>Asign CAMPX__Tier__c field based on CAMPX__ContributionAmount__c field.</description>
@@ -133,15 +116,67 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Record</name>
+        <label>Update Record</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>CAMPX__Tier__c</field>
+            <value>
+                <stringValue>Gold</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Record_Bronze</name>
+        <label>Update Record</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>CAMPX__Tier__c</field>
+            <value>
+                <stringValue>Bronze</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Record_None</name>
+        <label>Update_Record</label>
+        <locationX>534</locationX>
+        <locationY>731</locationY>
+        <inputAssignments>
+            <field>CAMPX__Tier__c</field>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Record_Silver</name>
+        <label>Update Record</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>CAMPX__Tier__c</field>
+            <value>
+                <stringValue>Silver</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
-        <locationX>320</locationX>
+        <locationX>408</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Contribution_0_to_1000</targetReference>
         </connector>
         <object>CAMPX__Sponsor__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordBeforeSave</triggerType>
+        <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
 </Flow>
