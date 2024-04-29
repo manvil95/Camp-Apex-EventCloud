@@ -1,41 +1,21 @@
 public with sharing class TRG_CAMPX_SponsorHelper {
     
     public static void updatingSponsorTierBasedOnContributionAmount(List<CAMPX__Sponsor__c> newCampxSponsors, Map<Id,CAMPX__Sponsor__c> oldMapSponsors) {
-        List<CAMPX__Sponsor__c> updatablesSponsors = new List<CAMPX__Sponsor__c>();
-        if (oldMapSponsors != null)
-        String tier = '';
         for (CAMPX__Sponsor__c sponsor : newCampxSponsors) {
-            
-            if (sponsor.CAMPX__ContributionAmount__c <= 0) {
-                tier = '';
+            if (    
+                    oldMapSponsors == null 
+                    || sponsor.CAMPX__ContributionAmount__c != oldMapSponsors.get(sponsor.Id).CAMPX__ContributionAmount__c
+            ) { 
+                if (sponsor.CAMPX__ContributionAmount__c >= 5000) {
+                    sponsor.CAMPX__Tier__c = 'Gold';
+                } else if (sponsor.CAMPX__ContributionAmount__c >= 1000) {
+                    sponsor.CAMPX__Tier__c = 'Silver';
+                } else if (sponsor.CAMPX__ContributionAmount__c > 0) {
+                    sponsor.CAMPX__Tier__c = 'Bronze';
+                } else {
+                    sponsor.CAMPX__Tier__c = '';
+                }
             }
-            
-            if (sponsor.CAMPX__ContributionAmount__c > 0 && sponsor.CAMPX__ContributionAmount__c < 1000) {
-                tier = 'Bronze';
-            }
-            
-            if (sponsor.CAMPX__ContributionAmount__c >= 1000 && sponsor.CAMPX__ContributionAmount__c < 5000) {
-                tier = 'Silver';
-            }
-            
-            if (sponsor.CAMPX__ContributionAmount__c >= 5000) {
-                tier = 'Gold';
-            }
-            CAMPX__Sponsor__c sponsorToUpdate = new CAMPX__Sponsor__c();
-            sponsorToUpdate.put(Schema.CAMPX__Sponsor__c.Id, sponsor.Id);
-            sponsorToUpdate.put(Schema.CAMPX__Sponsor__c.CAMPX__Tier__c, tier);
-            
-            if(oldMapSponsors != null && oldMapSponsors.get(sponsor.Id).CAMPX__Tier__c != tier) {
-                updatablesSponsors.add(sponsorToUpdate);    
-            }
-            
-            System.debug('updatableSponsors: ' + updatablesSponsors);
-        }
-        
-        try {
-            Database.update(updatablesSponsors);
-        } catch (Exception e) {
-            System.debug(e.getMessage());
         }
     }
 
