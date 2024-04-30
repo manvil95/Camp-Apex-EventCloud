@@ -15,9 +15,12 @@ public with sharing class TRG_CAMPX_SponsorHandler extends TriggerHandler {
     }
 
     public override void beforeInsert() {
+        TRG_CAMPX_SponsorHelper.validateStatusChangeToAccepted(this.listNew, this.mapOld);
         TRG_CAMPX_SponsorHelper.updatingSponsorTierBasedOnContributionAmount(this.listNew, null);
     }
+
     public override void afterInsert() {
+        TRG_CAMPX_SponsorHelper.updatingEventGrossRevenueUponSponsorAcceptance(this.listNew, this.mapOld);
     }
 
     public override void beforeUpdate() {
